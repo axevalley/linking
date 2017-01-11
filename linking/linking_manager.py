@@ -33,14 +33,26 @@ class LinkingManager:
             return
         self.print_status(source, sub_source)
 
-    def add_source_subsource_to_parser(self, parser):
-        group = parser.add_mutually_exclusive_group()
+    def add_source_subsource_to_parser(self, parser, required=False):
+        group = parser.add_mutually_exclusive_group(required=required)
         group.add_argument(
             '-s', '--source', required=False, type=str, default=None,
             help='Specify Source')
         group.add_argument(
             '-ss', '--subsource', required=False, type=str, default=None,
             help="Specify Sub Source")
+
+    def add_channel_item_linnworks_item_to_parser(self, parser):
+        channel_group = parser.add_mutually_exclusive_group(required=True)
+        channel_group.add_argument(
+            '-cs', '--sku', type=str, help="Channel SKU")
+        channel_group.add_argument('-ci', '--id', type=str, help="Channel ID")
+
+        linnworks_group = parser.add_mutually_exclusive_group(required=True)
+        linnworks_group.add_argument(
+            '-ls', '--linnsku', type=str, help="Linnworks SKU")
+        linnworks_group.add_argument(
+            '-i', '--stockid', type=str, help="Linnworks Stock ID (GUID)")
 
     def list(self):
         parser = argparse.ArgumentParser(description='List Channels')
@@ -64,6 +76,23 @@ class LinkingManager:
         if args.subsource is not None:
             sub_source = stclocal.sub_source_lookup(args.subsource)
         return source, sub_source
+
+    def link(self):
+        parser = argparse.ArgumentParser(
+            description="Link Linnworks Item and Channel Item")
+        self.add_channel_item_linnworks_item_to_parser(parser)
+        args = parser.parse_args(sys.argv[2:])
+        if args.stockid is not None:
+            stock_id = args.stock_id
+        else:
+            stock_id = stclocal.PyLinnworks.Inventory.get_stock_id_by_SKU(
+                args.sku)
+        channel_item = self.get_channel_item(
+            channel_id=args.id, channel_sku=args.sku)
+        channel_item.link(stock_id)
+
+    def get_channel_item(self):
+        raise NotImplementedError
 
     def print_status(self, source, sub_source):
         linking = stclocal.pylinnworks.Linking(
