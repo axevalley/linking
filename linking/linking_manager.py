@@ -80,6 +80,9 @@ class LinkingManager:
     def link(self):
         parser = argparse.ArgumentParser(
             description="Link Linnworks Item and Channel Item")
+        parser.add_argument(
+            '-c', '--channel', required=True, type=str, default=None,
+            help="Specify Channel")
         self.add_channel_item_linnworks_item_to_parser(parser)
         args = parser.parse_args(sys.argv[2:])
         if args.stockid is not None:
@@ -88,11 +91,18 @@ class LinkingManager:
             stock_id = stclocal.PyLinnworks.Inventory.get_stock_id_by_SKU(
                 args.sku)
         channel_item = self.get_channel_item(
-            channel_id=args.id, channel_sku=args.sku)
+            channel_id=args.id, channel_sku=args.sku, channel=args.channel)
         channel_item.link(stock_id)
 
-    def get_channel_item(self):
-        raise NotImplementedError
+    def get_channel_item(
+            self, channel_id=None, channel_sku=None, sub_source=None):
+        linking = stclocal.pylinnworks.Linking(sub_source=sub_source)
+        if len(linking) != 1:
+            raise ValueError
+        channel = linking[0]
+        for item in channel:
+            if item.channel_id == channel_id or item.sku == channel_sku:
+                return item
 
     def print_status(self, source, sub_source):
         linking = stclocal.pylinnworks.Linking(
