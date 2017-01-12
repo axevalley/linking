@@ -91,17 +91,20 @@ class LinkingManager:
             stock_id = stclocal.PyLinnworks.Inventory.get_stock_id_by_SKU(
                 args.sku)
         channel_item = self.get_channel_item(
-            channel_id=args.id, channel_sku=args.sku, channel=args.channel)
+            channel_reference_id=args.id, channel_sku=args.sku,
+            channel=args.channel)
         channel_item.link(stock_id)
 
     def get_channel_item(
-            self, channel_id=None, channel_sku=None, sub_source=None):
+            self, channel_reference_id=None, channel_sku=None,
+            sub_source=None):
         linking = stclocal.pylinnworks.Linking(sub_source=sub_source)
         if len(linking) != 1:
             raise ValueError
         channel = linking[0]
         for item in channel:
-            if item.channel_id == channel_id or item.sku == channel_sku:
+            if item.channel_reference_id == channel_reference_id or \
+                    item.sku == channel_sku:
                 return item
 
     def print_status(self, source, sub_source):
