@@ -1,2 +1,2 @@
-git+ssh://lseagle@lsgit.uk/~/lsgit.uk/stclocal.git@linking_integration
-git+ssh://lseagle@lsgit.uk/~/lsgit.uk/pylinnworks.git@integrate_with_linking_cli
+git+https://github.com/stcstores/stclocal.git@linking_integration
+git+https://github.com/stcstores/pylinnworks.git@integrate_with_linking_cli
