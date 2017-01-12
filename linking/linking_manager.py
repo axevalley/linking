@@ -3,12 +3,14 @@ import sys
 
 from linking.status import Status
 from linking.list import List
+from linking.refresh import Refresh
 
 
 class LinkingManager:
     commands = {
         'status': Status,
-        'list': List}
+        'list': List,
+        'refresh': Refresh}
 
     def __init__(self):
         command_usage = ['{}\t{}'.format(
