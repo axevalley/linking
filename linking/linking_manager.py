@@ -1,3 +1,5 @@
+"""Main class of linking CLI"""
+
 import argparse
 import sys
 
@@ -7,12 +9,19 @@ from linking.refresh import Refresh
 
 
 class LinkingManager:
+    """Main class of linking CLI.
+
+    Takes commands and calls the relevant command method.
+    Usage: linking <command> <args>
+    """
+
     commands = {
         'status': Status,
         'list': List,
         'refresh': Refresh}
 
     def __init__(self):
+        """Parse command line arguments and instanciate command class."""
         command_usage = ['{}\t{}'.format(
                 name, com.description) for name, com in self.commands.items()]
         usage = '\n'.join(
@@ -31,6 +40,7 @@ class LinkingManager:
 
 
 def main():
+    """Main method of package."""
     LinkingManager()
 
 if __name__ == "__main__":
