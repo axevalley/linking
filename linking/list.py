@@ -29,7 +29,7 @@ class List(Command):
 
     def get_args(self):
         """Get arguments from self.parser."""
-        super().get_args()
+        self.args = super().get_args()
         try:
             self.get_source_subsource_from_args()
         except stclocal.ChannelNotFound:

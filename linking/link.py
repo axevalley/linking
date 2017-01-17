@@ -33,7 +33,7 @@ class Link(Command):
 
     def get_args(self):
         """Get arguments from self.parser."""
-        super().get_args()
+        self.args = super().get_args()
         if self.args.stockid is not None:
             self.stock_id = self.args.stock_id
         else:
