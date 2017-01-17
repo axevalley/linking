@@ -3,7 +3,7 @@
 Passable command for linking CLI used for requesting Linnworks updates it's
 current list of items for selling channels.
 
-Usage: linking refresth <args>
+Usage: linking refresh <args>
 
 Arguments:
     -s    --source        Channel Source
