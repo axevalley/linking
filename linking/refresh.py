@@ -19,6 +19,7 @@ from .command import Command
 class Refresh(Command):
     """Main class of request command."""
 
+    name = 'refresh'
     description = 'Download up-to-date linking from channel to Linnworks'
 
     def make_parser(self):

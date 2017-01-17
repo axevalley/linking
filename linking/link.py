@@ -19,6 +19,7 @@ from . command import Command
 class Link(Command):
     """Main class of link command."""
 
+    name = 'link'
     description = 'Link Linnworks item to channel item'
 
     def make_parser(self):

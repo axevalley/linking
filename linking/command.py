@@ -1,6 +1,8 @@
 """Provide Command class."""
 
 import sys
+import datetime
+import os
 
 import stclocal
 
@@ -11,11 +13,32 @@ class Command:
     def __init__(self):
         self.make_parser()
         self.args = self.get_args()
+        self.make_log()
         self.main()
 
     def get_args(self):
         """Get arguments from self.parser."""
-        self.args = self.parser.parse_args(sys.argv[2:])
+        args = self.parser.parse_args(sys.argv[2:])
+        return args
+
+    def make_log(self):
+        """Create log file for transaction."""
+        now = datetime.datetime.now()
+        datestring = str(now).replace(':', '-')
+        self.log_file_name = '{} - {}.txt'.format(
+            datestring, self.name)
+        self.log_file_path = os.path.join(
+            stclocal.LOG_DIR, 'linking', str(now.year).zfill(2),
+            str(now.month).zfill(2), str(now.day))
+        os.makedirs(self.log_file_path, exist_ok=True)
+        self.log_file = os.path.join(self.log_file_path, self.log_file_name)
+        logfile = open(self.log_file, 'w')
+        logfile.close()
+
+    def log(self, text):
+        """Add line to logfile."""
+        with open(self.log_file, 'a') as logfile:
+            logfile.write(text.strip() + "\n")
 
     def add_source_subsource_to_parser(self, parser, required=False):
         """Add arguments to parser for specifying source and sub source."""

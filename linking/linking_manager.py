@@ -1,4 +1,4 @@
-"""Main class of linking CLI"""
+"""Main class of linking CLI."""
 
 import argparse
 import sys
@@ -6,6 +6,8 @@ import sys
 from linking.status import Status
 from linking.list import List
 from linking.refresh import Refresh
+from linking.link import Link
+from linking.copylink import CopyLink
 
 
 class LinkingManager:
@@ -18,7 +20,9 @@ class LinkingManager:
     commands = {
         'status': Status,
         'list': List,
-        'refresh': Refresh}
+        'refresh': Refresh,
+        'link': Link,
+        'copylink': CopyLink}
 
     def __init__(self):
         """Parse command line arguments and instanciate command class."""

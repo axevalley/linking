@@ -11,6 +11,7 @@ Arguments:
 """
 
 import argparse
+import json
 import stclocal
 
 from .command import Command
@@ -19,16 +20,17 @@ from .command import Command
 class Status(Command):
     """Main class of status command."""
 
+    name = 'status'
     description = 'Get linking status'
 
     def make_parser(self):
         """Create argument parser and add arguments."""
-        self.parser = argparse.ArgumentParser(description='Get Linking Status')
+        self.parser = argparse.ArgumentParser(description=self.description)
         self.add_source_subsource_to_parser(self.parser)
 
     def get_args(self):
         """Get arguments from self.parser."""
-        super().get_args()
+        self.args = super().get_args()
         try:
             self.get_source_subsource_from_args()
         except stclocal.ChannelNotFound:
@@ -38,9 +40,11 @@ class Status(Command):
         """Print linking status."""
         linking = stclocal.pylinnworks.Linking(
             source=self.source, sub_source=self.sub_source)
-        for channel in linking:
-            print('{} - {}'.format(channel.source, channel.sub_source))
-            print('Total: {}'.format(channel.total))
-            print('Unlinked: {}'.format(channel.unlinked))
-            print('Linked: {}'.format(channel.linked))
-            print()
+        data = {'{} - {}'.format(channel.source, channel.sub_source): {
+            'Total': channel.total,
+            'Unlinked': channel.unlinked,
+            'Linked': channel.linked
+        } for channel in linking}
+        data_string = json.dumps(data, indent=4, separators=(',', ': '))
+        self.log(data_string)
+        print(data_string)

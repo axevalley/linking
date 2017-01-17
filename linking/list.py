@@ -19,6 +19,7 @@ from .command import Command
 class List(Command):
     """Main class of list command."""
 
+    name = 'list'
     description = 'Get list of available channels'
 
     def make_parser(self):
