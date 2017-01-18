@@ -42,8 +42,8 @@ class Status(Command):
             source=self.source, sub_source=self.sub_source)
         data = {'{} - {}'.format(channel.source, channel.sub_source): {
             'Total': channel.total,
-            'Unlinked': channel.unlinked,
-            'Linked': channel.linked
+            'Linked': channel.linked,
+            'Unlinked': channel.unlinked
         } for channel in linking}
         data_string = json.dumps(data, indent=4, separators=(',', ': '))
         self.log(data_string)
