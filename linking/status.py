@@ -11,7 +11,6 @@ Arguments:
 """
 
 import argparse
-import json
 import stclocal
 
 from .command import Command
