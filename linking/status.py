@@ -36,15 +36,20 @@ class Status(Command):
         except stclocal.ChannelNotFound:
             return
 
+    def get_status_string_for_channel(self, channel):
+        """Make string from channel status information."""
+        channel_name = '{0: <35}'.format(
+            '{} {}'.format(channel.source, channel.sub_source))
+        total = 'Total: {}'.format(channel.total)
+        linked = 'Linked: {}'.format(channel.linked)
+        unlinked = 'Unlinked: {}'.format(channel.unlinked)
+        return '\t'.join([channel_name, total, linked, unlinked])
+
     def main(self):
         """Print linking status."""
         linking = stclocal.pylinnworks.Linking(
             source=self.source, sub_source=self.sub_source)
-        data = {'{} - {}'.format(channel.source, channel.sub_source): {
-            'Total': channel.total,
-            'Linked': channel.linked,
-            'Unlinked': channel.unlinked
-        } for channel in linking}
-        data_string = json.dumps(data, indent=4, separators=(',', ': '))
-        self.log(data_string)
-        print(data_string)
+        data = '\n'.join([self.get_status_string_for_channel(
+            channel) for channel in linking])
+        self.log(data)
+        print(data)
