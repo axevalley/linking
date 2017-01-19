@@ -8,6 +8,7 @@ from linking.list import List
 from linking.refresh import Refresh
 from linking.link import Link
 from linking.copylink import CopyLink
+from linking.skulink import SKULink
 
 
 class LinkingManager:
@@ -22,7 +23,8 @@ class LinkingManager:
         'list': List,
         'refresh': Refresh,
         'link': Link,
-        'copylink': CopyLink}
+        'copylink': CopyLink,
+        'skulink': SKULink}
 
     def __init__(self):
         """Parse command line arguments and instanciate command class."""
