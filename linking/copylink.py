@@ -50,20 +50,24 @@ class CopyLink(Command):
             source_channel=self.source_channel,
             destination_channel=self.destination_channel)
 
+    def get_channel_item_by_sku(self, channel, sku):
+        return channel.get_items(keyword=sku)
+
     def copylink(self, source_channel=None, destination_channel=None):
         """Copy linking information from one channel to another."""
-        source = stclocal.pylinnworks.Linking(sub_source=source_channel)[0]
-        print('Downloading items for {}'.format(str(source)))
-        source_items = source.get_all(unlinked=False)
-        linking_lookup = {
-            item.sku: item.linked_item_id for item in source_items}
-        destination = stclocal.pylinnworks.Linking(
-            sub_source=destination_channel)[0]
-        print('Downloading items for {}'.format(str(destination)))
-        destination_items = destination.get_all(linked=False)
+        source = stclocal.pylinnworks.Linking.get_channel_by_sub_source(
+            source_channel)
+        destination = stclocal.pylinnworks.Linking.get_channel_by_sub_source(
+            destination_channel)
+        print('Downloading unlinked items for {}'.format(str(destination)))
+        destination_items = destination.get_items(linked=False)
         for item in destination_items:
-            if item.sku in linking_lookup:
-                self.log('{} item {} linked to {} item {}'.format(
-                    str(source), str(item.sku), str(destination),
-                    str(item.sku)))
-                item.link(linking_lookup[item.sku])
+            try:
+                source_item = source.get_item_by_sku(item.sku, unlinked=False)
+            except:
+                continue
+            else:
+                self.log('{} {} item {} linked to {} item {}'.format(
+                    source_item.source, source_item.sub_source,
+                    source_item.sku, str(destination), item.sku))
+                item.link(source_item.linked_item_id)
