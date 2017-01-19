@@ -7,3 +7,4 @@ Usage: linking <command> <args>
 
 from . linking_manager import LinkingManager
 from . status import Status
+from . linking_manager import main
