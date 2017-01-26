@@ -38,7 +38,11 @@ class Status(Command):
             try:
                 source = stclocal.source_lookup(self.args.channels)
             except stclocal.ChannelNotFound:
-                sub_source = stclocal.sub_source_lookup(self.args.channels)
+                try:
+                    sub_source = stclocal.sub_source_lookup(self.args.channels)
+                except:
+                    print('Channel not found')
+                    exit(1)
                 source = None
             else:
                 sub_source = None
