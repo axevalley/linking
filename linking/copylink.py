@@ -61,13 +61,19 @@ class CopyLink(Command):
             destination_channel)
         print('Downloading unlinked items for {}'.format(str(destination)))
         destination_items = destination.get_items(linked=False)
+        linked_count = 0
+        not_linked_count = 0
         for item in destination_items:
             try:
-                source_item = source.get_item_by_sku(item.sku, unlinked=False)
+                source_item = source.get_item_by_SKU(item.sku, unlinked=False)
             except:
+                not_linked_count += 1
                 continue
             else:
                 self.log('{} {} item {} linked to {} item {}'.format(
                     source_item.source, source_item.sub_source,
                     source_item.sku, str(destination), item.sku))
                 item.link(source_item.linked_item_id)
+                linked_count += 1
+        print('{} items linked.'.format(linked_count))
+        print('{} items failed to link.'.format(not_linked_count))

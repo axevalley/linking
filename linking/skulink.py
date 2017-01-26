@@ -40,14 +40,20 @@ class SKULink(Command):
         channel = stclocal.pylinnworks.Linking.get_channel_by_sub_source(
             sub_source=self.sub_source)
         items = channel.get_items(linked=False)
+        linked_count = 0
+        not_linked_count = 0
         for item in items:
             try:
                 linn_item = stclocal.pylinnworks.Inventory.get_item_by_SKU(
                     item.sku)
             except:
+                not_linked_count += 1
                 continue
             else:
                 self.log('{} {} item {} linked to {}: {}'.format(
                     item.source, item.sub_source, item.sku, linn_item.sku,
                     linn_item.stock_id))
                 item.link(linn_item.stock_id)
+                linked_count += 1
+        print('{} items linked.'.format(linked_count))
+        print('{} items failed to link.'.format(not_linked_count))
