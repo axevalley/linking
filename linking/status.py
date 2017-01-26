@@ -25,15 +25,25 @@ class Status(Command):
     def make_parser(self):
         """Create argument parser and add arguments."""
         self.parser = argparse.ArgumentParser(description=self.description)
-        self.add_source_subsource_to_parser(self.parser)
+        self.parser.add_argument(
+            'channels', nargs='?', default=None, type=str)
 
     def get_args(self):
         """Get arguments from self.parser."""
         self.args = super().get_args()
-        try:
-            self.get_source_subsource_from_args()
-        except stclocal.ChannelNotFound:
-            return
+        if self.args.channels is None:
+            source = None
+            sub_source = None
+        else:
+            try:
+                source = stclocal.source_lookup(self.args.channels)
+            except stclocal.ChannelNotFound:
+                sub_source = stclocal.sub_source_lookup(self.args.channels)
+                source = None
+            else:
+                sub_source = None
+        self.channels = stclocal.pylinnworks.Linking(
+            sub_source=sub_source, source=source)
 
     def get_status_string_for_channel(self, channel):
         """Make string from channel status information."""
@@ -46,9 +56,7 @@ class Status(Command):
 
     def main(self):
         """Print linking status."""
-        linking = stclocal.pylinnworks.Linking(
-            source=self.source, sub_source=self.sub_source)
         data = '\n'.join([self.get_status_string_for_channel(
-            channel) for channel in linking])
+            channel) for channel in self.channels])
         self.log(data)
         print(data)
