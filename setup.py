@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='linking',
-    version='1.0',
+    version='1.1',
     description='Manages Linnworks linking',
     author='Luke Shiner',
     install_requires=['requests'],

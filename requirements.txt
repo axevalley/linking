@@ -1,2 +1,2 @@
-git+https://github.com/stcstores/stclocal.git@linking_integration
-git+https://github.com/stcstores/pylinnworks.git@integrate_with_linking_cli
+git+https://github.com/stcstores/stclocal.git@v1.7
+git+https://github.com/stcstores/pylinnworks.git@v1.8
